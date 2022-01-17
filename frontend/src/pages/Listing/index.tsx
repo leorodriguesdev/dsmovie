@@ -1,19 +1,28 @@
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import MovieCard from "components/MovieCard";
 import Pagination from "components/Pagination";
 import { BASE_URL } from 'utils/requests';
+import { MoviePage } from 'types/movie';
 
 export default function Listing() {
 
-    //FORMA ERRADA
-    axios.get(`${BASE_URL}/movies`)
-    .then(response => {
-        const movies = response.data;
-        console.log(movies);
-    });
+    const [pageNumber, setPageNumber] = useState(0);
+
+    useEffect(() => {
+        axios.get(`${BASE_URL}/movies`)
+        .then(response => {
+            const data = response.data as MoviePage;
+            console.log(data);
+            setPageNumber(data.number);
+        });
+    }, [])
+
+
 
     return (
         <>
+            <p>{pageNumber}</p>
             <Pagination />
             <div className="container">
                 <div className="row">
@@ -35,7 +44,6 @@ export default function Listing() {
                     <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
                         <MovieCard />
                     </div>               
-\
                 </div>
             </div>
 
